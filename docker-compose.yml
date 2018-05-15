@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  haproxy.service:
+    build:
+      context: ./haproxy
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - static.service
+      - london.service
+
+  static.service:
+    build:
+      context: ./static
+      dockerfile: Dockerfile
+
+  london.service:
+    build:
+      context: ./london
+      dockerfile: Dockerfile
+        
