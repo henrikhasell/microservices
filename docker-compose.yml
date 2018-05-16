@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   haproxy.service:
     build:
       context: ./haproxy
@@ -8,16 +9,33 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - static.service
+      - brussels.service
+      - home.service
       - london.service
+      - paris.service
+      - static.service
 
-  static.service:
+  brussels.service:
     build:
-      context: ./static
+      context: ./brussels
+      dockerfile: Dockerfile
+
+  home.service:
+    build:
+      context: ./home
       dockerfile: Dockerfile
 
   london.service:
     build:
       context: ./london
       dockerfile: Dockerfile
+
+  paris.service:
+    build:
+      context: ./paris
+      dockerfile: Dockerfile
         
+  static.service:
+    build:
+      context: ./static
+      dockerfile: Dockerfile

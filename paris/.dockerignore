@@ -1,0 +1,4 @@
+*
+!*.csproj
+!**/*.cs
+!Views/**/*.cshtml
