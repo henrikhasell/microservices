@@ -2,6 +2,9 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
+// Note to self:
+// http://blog.hovland.xyz/2017-04-09-simple-and-elegant-microservices-authentication-using-JWT/
+
 namespace Authentication.Controllers
 {
     [Route("api/[controller]")]
