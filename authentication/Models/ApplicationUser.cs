@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace Authentication.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser
     {
+        public string Name { set; get; }
         
+        public string Email { set; get; }
     }
 }

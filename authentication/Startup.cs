@@ -1,29 +1,38 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using IdentityServer4.EntityFramework.DbContexts;
-using System.Linq;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Authentication
 {
     public class Startup
     {
+        private readonly IConfiguration configuration;
+
+        public Startup (IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddIdentityServer()
-            .AddDeveloperSigningCredential()
-            .AddConfigurationStore(options =>
-            {
-                options.ConfigureDbContext =
-                    builder => builder.UseSqlServer("Data Source=authentication.sqlite3", sql => sql.MigrationsAssembly("Authentication"));
-            })
-            .AddOperationalStore(options =>
-            {
-                options.ConfigureDbContext =
-                    builder => builder.UseSqlServer("Data Source=authentication.sqlite3", sql => sql.MigrationsAssembly("Authentication"));
-            });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                    };
+                });
         }
         
         public void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment)
@@ -32,45 +41,9 @@ namespace Authentication
             {
                 applicationBuilder.UseDeveloperExceptionPage();
             }
-
+            
+            applicationBuilder.UseAuthentication();
             applicationBuilder.UseMvcWithDefaultRoute();
-        }
-
-        private void InitializeDatabase(IApplicationBuilder app)
-        {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-
-                var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                context.Database.Migrate();
-                if (!context.Clients.Any())
-                {
-                    foreach (var client in Config.GetClients())
-                    {
-                        context.Clients.Add(client.ToEntity());
-                    }
-                    context.SaveChanges();
-                }
-
-                if (!context.IdentityResources.Any())
-                {
-                    foreach (var resource in Config.GetIdentityResources())
-                    {
-                        context.IdentityResources.Add(resource.ToEntity());
-                    }
-                    context.SaveChanges();
-                }
-
-                if (!context.ApiResources.Any())
-                {
-                    foreach (var resource in Config.GetApiResources())
-                    {
-                        context.ApiResources.Add(resource.ToEntity());
-                    }
-                    context.SaveChanges();
-                }
-            }
         }
     }
 }
