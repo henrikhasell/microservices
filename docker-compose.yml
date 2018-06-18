@@ -7,13 +7,18 @@ services:
       context: ./haproxy
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - brussels.service
       - home.service
       - london.service
       - paris.service
       - static.service
+
+  authentication.service:
+    build:
+      context: ./authentication
+      dockerfile: Dockerfile
 
   brussels.service:
     build:

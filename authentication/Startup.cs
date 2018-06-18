@@ -25,8 +25,10 @@ namespace Authentication
             services.AddMvc();
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme =
+                        CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme =
+                        CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie();
                 /*
