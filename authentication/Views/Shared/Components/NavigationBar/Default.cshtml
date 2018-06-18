@@ -1,0 +1,38 @@
+@using System.Linq
+@using System.Security.Claims
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Microservices Demo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-menu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav-menu">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/brussels">Brussels</a></li>
+            <li class="nav-item"><a class="nav-link" href="/london">London</a></li>
+            <li class="nav-item"><a class="nav-link" href="/paris">Paris</a></li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <span class="navbar-text">@Context.Connection.LocalIpAddress.ToString()</span>
+            </li>
+        @{ Claim claim = User.Claims.FirstOrDefault(i => i.Type == "name"); }
+        @if(claim != null)
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Logged in as <strong>@claim.Value</strong></a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="/account">Account Details</a>
+                  <a class="dropdown-item" href="/account/logout">Log Out</a>
+                </div>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="/account">Log In</a>
+            </li>
+        }
+        </ul>
+    </div>
+</nav>

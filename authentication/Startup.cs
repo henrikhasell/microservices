@@ -23,6 +23,7 @@ namespace Authentication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =
@@ -31,21 +32,6 @@ namespace Authentication
                         CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie();
-                /*
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["Jwt:Issuer"],
-                        ValidAudience = configuration["Jwt:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
-                    };
-                });
-                */
         }
         
         public void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment)

@@ -9,6 +9,7 @@ services:
     ports:
       - "8080:80"
     depends_on:
+      - authentication.service
       - brussels.service
       - home.service
       - london.service

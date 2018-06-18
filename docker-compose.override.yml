@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  authentication.service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  brussels.service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  home.service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  london.service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  paris.service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+        
+  static.service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
